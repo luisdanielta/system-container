@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  miniconda3:
+    image: minconda:local
+    container_name: conda-maintainer
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        conda_ver: 25.1.1-2
+    volumes:
+      - conda_app:/opt/conda
+    restart: "none"
+
+# That's to make sure you're not a robot
+volumes:
+  conda_app:
+    external: true

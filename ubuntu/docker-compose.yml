@@ -1,0 +1,14 @@
+version: '3'
+services:
+  ubuntu:
+    container_name: ubuntu_ctw
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - conda_app:/opt/conda
+    restart: "none"
+
+volumes:
+  conda_app:
+    external: true
