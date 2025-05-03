@@ -1,13 +1,46 @@
-version: '3'
+version: '3.5'
 services:
-  ubuntu:
-    container_name: ubuntu_ctw
+  ctn-user:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        username: user
+    container_name: ubuntu-user
     volumes:
       - conda_app:/opt/conda
     restart: "none"
+    tty: true
+    dns:
+      - 8.8.8.8
+
+  ctn-luist:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        username: luist
+    container_name: ubuntu-luist
+    volumes:
+      - conda_app:/opt/conda:rw
+    restart: "none"
+    tty: true
+    dns:
+      - 8.8.8.8
+
+  ctn-juan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        username: juan
+    container_name: ubuntu-juan
+    volumes:
+      - conda_app:/opt/conda
+    restart: "none"
+    tty: true
+    dns:
+      - 8.8.8.8
 
 volumes:
   conda_app:
