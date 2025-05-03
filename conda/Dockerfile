@@ -7,6 +7,8 @@ FROM continuumio/miniconda3:${conda_ver} AS conda
 # Alpine Linux as lightweight runtime and file maintainer
 FROM alpine:${alpine_ver}
 
+USER root
+
 # Copies entire Miniconda installation from stage 1 to a temporary Alpine location
 COPY --from=conda /opt/conda /conda
 
