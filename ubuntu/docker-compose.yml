@@ -1,26 +1,56 @@
+# This Compose file defines two Ubuntu-based services sharing core configuration
+# for user environments and network settings, using YAML anchors to enforce DRY.
+
 version: '3.5'
 
+# Shared settings for all Ubuntu services
+x-ubuntu-base: &ubuntu-base
+  image: ubuntu:local
+  restart: no
+  networks:
+    lan_net: {}
+
+x-vol-conda: &vol-conda conda_app:/opt/conda
+x-vol-shared: &vol-shared user_shared:/home/shared
+
 services:
-  ubuntu-user:
-    image: ubuntu:local
-    container_name: ubuntu-user
+  ubuntu-luist:
+    <<: *ubuntu-base
+    container_name: "ubuntu-luist"
     environment:
-      - USERNAME=luist
-      - USER_UID=1000
-      - USER_GID=1000
-      - USER_PASSWORD=3956
+      USERNAME: "luist"
     volumes:
-      - conda_app:/opt/conda
-    restart: "no"
+      - *vol-conda
+      - *vol-shared
+      - user_data_luist:/home/luist
     networks:
       lan_net:
         ipv4_address: 192.168.1.100
 
+  ubuntu-carlj:
+    <<: *ubuntu-base
+    container_name: "ubuntu-carlj"
+    environment:
+      USERNAME: "carlj"
+    volumes:
+      - *vol-conda
+      - *vol-shared
+      - user_data_carlj:/home/carlj
+    networks:
+      lan_net:
+        ipv4_address: 192.168.1.101
+
 volumes:
+  user_shared:
+    external: true
   conda_app:
     external: true
+  
+  user_data_luist:
+    external: false
+  user_data_carlj:
+    external: false
 
 networks:
   lan_net:
     external: true
-    # docker network create --driver=macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=enp1s0 lan_net
