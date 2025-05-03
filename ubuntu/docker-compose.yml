@@ -1,47 +1,26 @@
 version: '3.5'
+
 services:
-  ctn-user:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        username: user
+  ubuntu-user:
+    image: ubuntu:local
     container_name: ubuntu-user
+    environment:
+      - USERNAME=luist
+      - USER_UID=1000
+      - USER_GID=1000
+      - USER_PASSWORD=3956
     volumes:
       - conda_app:/opt/conda
-    restart: "none"
-    tty: true
-    dns:
-      - 8.8.8.8
-
-  ctn-luist:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        username: luist
-    container_name: ubuntu-luist
-    volumes:
-      - conda_app:/opt/conda:rw
-    restart: "none"
-    tty: true
-    dns:
-      - 8.8.8.8
-
-  ctn-juan:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        username: juan
-    container_name: ubuntu-juan
-    volumes:
-      - conda_app:/opt/conda
-    restart: "none"
-    tty: true
-    dns:
-      - 8.8.8.8
+    restart: "no"
+    networks:
+      lan_net:
+        ipv4_address: 192.168.1.100
 
 volumes:
   conda_app:
     external: true
+
+networks:
+  lan_net:
+    external: true
+    # docker network create --driver=macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=enp1s0 lan_net
