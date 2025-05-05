@@ -19,7 +19,7 @@ x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
 x-vol-usr: &vol-usr user_usr:/usr/local
 
-# apps
+# app
 x-vol-conda: &vol-conda conda_app:/opt/conda
 
 services:

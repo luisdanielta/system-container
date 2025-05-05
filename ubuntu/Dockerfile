@@ -21,7 +21,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 RUN mkdir -p /var/run/sshd
 RUN ssh-keygen -A
 RUN sed -i 's/^#PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
-     && sed -i 's/^#PermitRootLogin .*/PermitRootLogin no/'          /etc/ssh/sshd_config
+     && sed -i 's/^#PermitRootLogin .*/PermitRootLogin no/' /etc/ssh/sshd_config
 
 COPY --from=entrydata /entrypoint/create-user.sh /usr/create-user.sh
 RUN chmod +x /usr/create-user.sh
