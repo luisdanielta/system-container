@@ -9,7 +9,9 @@ x-ubuntu-base: &ubuntu-base
   dns:
     - 8.8.8.8
   networks:
-    lan_net: {}
+    - network_shared
+    - network_user
+    - lan_net
 
 # system
 x-vol-shared: &vol-shared user_shared:/home/shared
@@ -38,9 +40,6 @@ services:
       - *vol-opt
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
-    networks:
-      lan_net:
-        ipv4_address: 192.168.1.100
 
   ubuntu-carlj:
     <<: *ubuntu-base
@@ -57,9 +56,6 @@ services:
       - *vol-opt
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
-    networks:
-      lan_net:
-        ipv4_address: 192.168.1.101
 
 volumes:
   conda_app:
@@ -86,5 +82,9 @@ volumes:
     external: false
 
 networks:
+  network_user:
+    external: true
+  network_shared:
+    external: true
   lan_net:
     external: true
