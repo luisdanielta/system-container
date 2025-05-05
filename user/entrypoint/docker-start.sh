@@ -11,5 +11,7 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 echo "Docker daemon started successfully"
+groupadd docker || true
+usermod -aG docker "${USERNAME}" || true
 
 exec "$@"
