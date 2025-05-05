@@ -41,7 +41,6 @@ services:
     networks:
       lan_net:
         ipv4_address: 192.168.1.100
-    tty: true
 
   ubuntu-carlj:
     <<: *ubuntu-base
