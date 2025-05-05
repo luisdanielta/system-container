@@ -19,7 +19,6 @@ x-vol-tmp: &vol-tmp user_tmp:/tmp
 x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
-x-vol-usr: &vol-usr user_usr:/usr/local
 
 # app
 x-vol-conda: &vol-conda conda_app:/opt/conda
@@ -28,6 +27,7 @@ services:
   ubuntu-luist:
     <<: *ubuntu-base
     container_name: "ubuntu-luist"
+    privileged: true
     environment:
       USERNAME: "luist"
     volumes:
@@ -36,7 +36,6 @@ services:
       - *vol-tmp
       - *vol-log
       - *vol-cache
-      - *vol-usr
       - *vol-opt
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
@@ -44,6 +43,7 @@ services:
   ubuntu-carlj:
     <<: *ubuntu-base
     container_name: "ubuntu-carlj"
+    privileged: true
     environment:
       USERNAME: "carlj"
     volumes:
@@ -52,11 +52,9 @@ services:
       - *vol-tmp
       - *vol-log
       - *vol-cache
-      - *vol-usr
       - *vol-opt
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
-
 volumes:
   conda_app:
     external: true
@@ -75,8 +73,6 @@ volumes:
   user_cache:
     external: false
   user_shared:
-    external: false
-  user_usr:
     external: false
   user_opt:
     external: false
