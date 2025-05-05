@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Starts the Docker daemon in the background
-dockerd &
+dockerd > /var/log/dockerd.log 2>&1 &
 
 # If the docker daemon fails to start, exit with an error
 if ! docker info > /dev/null 2>&1; then
