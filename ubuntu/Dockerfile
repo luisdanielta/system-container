@@ -1,29 +1,30 @@
-FROM ubuntu:20.04
-LABEL description="Ubuntu with Miniconda, passwordless sudo, and SSH user via ENV."
+ARG ubuntu_ver=20.04
 
+FROM entrypoint:local AS entrydata
+FROM ubuntu:${ubuntu_ver}
+LABEL description="Ubuntu, passwordless sudo, and SSH user via ENV."
+
+ARG user_uid=1000
+ARG user_gid=1000
+ARG TZ=America/Bogota
+
+USER root
 ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=America/Bogota
+ENV TZ=${TZ}
 
-# Expose Conda in PATH
-ENV PATH=/opt/conda/bin:$PATH
+ENV USER_UID=${user_uid}
+ENV USER_GID=${user_gid}
 
-# Install dependencies
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-      sudo curl wget openssh-server \
- && rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+     sudo curl wget git openssh-server && rm -rf /var/lib/apt/lists/*
 
-# Create user, set its password, grant sudo
-ARG USERNAME=user
-ARG USER_UID=1000
-ARG USER_GID=1000
+RUN mkdir -p /var/run/sshd
+RUN ssh-keygen -A
+RUN sed -i 's/^#PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+     && sed -i 's/^#PermitRootLogin .*/PermitRootLogin no/'          /etc/ssh/sshd_config
 
-COPY entrypoint.sh /tmp/entrypoint.sh
-RUN chmod +x /tmp/entrypoint.sh
+COPY --from=entrydata /entrypoint/create-user.sh /usr/create-user.sh
+RUN chmod +x /usr/create-user.sh
+ENTRYPOINT ["/usr/create-user.sh"]
 
-COPY password.txt /password.txt
-
-EXPOSE 22
-
-ENTRYPOINT ["/tmp/entrypoint.sh"]
 CMD ["/usr/sbin/sshd", "-D"]

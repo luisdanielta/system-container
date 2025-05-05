@@ -1,17 +1,26 @@
 # This Compose file defines two Ubuntu-based services sharing core configuration
 # for user environments and network settings, using YAML anchors to enforce DRY.
-
 version: '3.5'
 
 # Shared settings for all Ubuntu services
 x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
   restart: no
+  dns:
+    - 8.8.8.8
   networks:
     lan_net: {}
 
-x-vol-conda: &vol-conda conda_app:/opt/conda
+# system
 x-vol-shared: &vol-shared user_shared:/home/shared
+x-vol-tmp: &vol-tmp user_tmp:/tmp
+x-vol-log: &vol-log user_log:/var/log
+x-vol-cache: &vol-cache user_cache:/var/cache
+x-vol-opt: &vol-opt user_opt:/opt
+x-vol-usr: &vol-usr user_usr:/usr/local
+
+# apps
+x-vol-conda: &vol-conda conda_app:/opt/conda
 
 services:
   ubuntu-luist:
@@ -22,10 +31,17 @@ services:
     volumes:
       - *vol-conda
       - *vol-shared
+      - *vol-tmp
+      - *vol-log
+      - *vol-cache
+      - *vol-usr
+      - *vol-opt
       - user_data_luist:/home/luist
+      - user_cache:/home/luist/.cache
     networks:
       lan_net:
         ipv4_address: 192.168.1.100
+    tty: true
 
   ubuntu-carlj:
     <<: *ubuntu-base
@@ -35,20 +51,39 @@ services:
     volumes:
       - *vol-conda
       - *vol-shared
+      - *vol-tmp
+      - *vol-log
+      - *vol-cache
+      - *vol-usr
+      - *vol-opt
       - user_data_carlj:/home/carlj
+      - user_cache:/home/carlj/.cache
     networks:
       lan_net:
         ipv4_address: 192.168.1.101
 
 volumes:
-  user_shared:
-    external: true
   conda_app:
     external: true
   
+  # User-specific volumes
   user_data_luist:
     external: false
   user_data_carlj:
+    external: false
+  
+  # Shared volumes
+  user_tmp:
+    external: false
+  user_log:
+    external: false
+  user_cache:
+    external: false
+  user_shared:
+    external: false
+  user_usr:
+    external: false
+  user_opt:
     external: false
 
 networks:
