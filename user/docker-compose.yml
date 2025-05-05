@@ -3,5 +3,24 @@ version: '3.5'
 services:
   maintainer:
     image: maintainer:local
+    container_name: maintainer
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - USERNAME=maintainer
+    volumes:
+      - maintainer:/home/maintainer
+      - ubuntu_user_shared:/home/shared
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /mnt:/mnt # disk mount from host
+    group_add:
+      - "998"
+
+volumes:
+  maintainer:
+    external: false
+
+  # ubuntu_ this created for compose
+  ubuntu_user_shared:
+    external: true
