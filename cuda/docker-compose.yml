@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+  cuda-11:
+    image: cuda:local
+    container_name: cuda-maintainer-11
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        cuda_ver: 11.8.0
+    volumes:
+        - driver_11:/usr/local/cuda
+    restart: "none"
+
+volumes:
+  driver_11:
+    external: false
