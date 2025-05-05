@@ -20,16 +20,27 @@ x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
 
+x-gpu: &gpu
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+
 # app
 x-vol-conda: &vol-conda conda_app:/opt/conda
 
 services:
   ubuntu-luist:
     <<: *ubuntu-base
+    <<: *gpu
     container_name: "ubuntu-luist"
     privileged: true
     environment:
       USERNAME: "luist"
+      #NVIDIA_VISIBLE_DEVICES: "all"
     volumes:
       - *vol-conda
       - *vol-shared
@@ -39,6 +50,7 @@ services:
       - *vol-opt
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
+      - cuda_driver_11:/usr/local/cuda
 
   ubuntu-carlj:
     <<: *ubuntu-base
@@ -57,6 +69,9 @@ services:
       - user_cache:/home/carlj/.cache
 volumes:
   conda_app:
+    external: true
+  
+  cuda_driver_11:
     external: true
   
   # User-specific volumes
