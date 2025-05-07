@@ -18,9 +18,12 @@ fi
 EOF
 fi
 
-# Execute your custom initialization scripts
-/usr/docker-start.sh
-/usr/shh-start.sh
-
 . "$BASHRC/.bash_profile"
+
+# Execute your custom initialization scripts
+if [ "$DOCKER_APP" = "true" ]; then
+    /usr/docker-start.sh
+fi
+
+/usr/shh-start.sh
 exec "$@"

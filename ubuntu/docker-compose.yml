@@ -19,8 +19,9 @@ x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
 
-# app
-x-vol-conda: &vol-conda conda_app:/opt/conda
+# App
+x-conda-25: &vol-conda-25 conda_app_25:/opt/conda
+x-conda-4: &vol-conda-4 conda_app_4:/opt/conda
 
 # Machine-specific settings
 services:
@@ -39,7 +40,7 @@ services:
       - *vol-log
       - *vol-cache
       - *vol-opt
-      - *vol-conda
+      - *vol-conda-25
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
 
@@ -58,7 +59,7 @@ services:
       - *vol-log
       - *vol-cache
       - *vol-opt
-      - *vol-conda
+      - *vol-conda-4
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
 
@@ -70,7 +71,10 @@ volumes:
     external: false # change me -  data persistent volume
   
   # App
-  conda_app:
+  conda_app_4:
+    external: true
+  
+  conda_app_25:
     external: true
 
   # Shared volume
