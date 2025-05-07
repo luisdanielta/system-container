@@ -8,10 +8,6 @@ x-ubuntu-base: &ubuntu-base
   restart: no
   dns:
     - 8.8.8.8
-  networks:
-    - network_shared
-    - network_user
-    - lan_net
 
 # system
 x-vol-shared: &vol-shared user_shared:/home/shared
@@ -19,6 +15,9 @@ x-vol-tmp: &vol-tmp user_tmp:/tmp
 x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
+
+# app
+x-vol-conda: &vol-conda conda_app:/opt/conda
 
 x-gpu: &gpu
   deploy:
@@ -29,37 +28,45 @@ x-gpu: &gpu
             count: all
             capabilities: [gpu]
 
-# app
-x-vol-conda: &vol-conda conda_app:/opt/conda
 
+# Machine-specific settings
 services:
   ubuntu-luist:
     <<: *ubuntu-base
-    <<: *gpu
+    #<<: *gpu
     container_name: "ubuntu-luist"
     privileged: true
     environment:
       USERNAME: "luist"
+      PSWD: "9031"
       #NVIDIA_VISIBLE_DEVICES: "all"
     volumes:
-      - *vol-conda
       - *vol-shared
       - *vol-tmp
       - *vol-log
       - *vol-cache
       - *vol-opt
+      - *vol-conda
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
-      - cuda_driver_11:/usr/local/cuda
+    
+    networks:
+      network_shared:
+      network_user:
+      lan_net:
+          ipv4_address: 192.168.1.3
+      
 
   ubuntu-carlj:
     <<: *ubuntu-base
+    #<<: *gpu
     container_name: "ubuntu-carlj"
     privileged: true
     environment:
       USERNAME: "carlj"
+      PSWD: "9031"
+      #NVIDIA_VISIBLE_DEVICES: "all"
     volumes:
-      - *vol-conda
       - *vol-shared
       - *vol-tmp
       - *vol-log
@@ -67,19 +74,24 @@ services:
       - *vol-opt
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
+    
+    networks:
+      network_shared:
+      network_user:
+
 volumes:
-  conda_app:
-    external: true
-  
-  cuda_driver_11:
-    external: true
-  
+
   # User-specific volumes
   user_data_luist:
     external: false
+  
+
   user_data_carlj:
     external: false
   
+  conda_app:
+    external: true
+
   # Shared volumes
   user_tmp:
     external: false

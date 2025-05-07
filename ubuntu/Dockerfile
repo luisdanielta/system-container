@@ -18,14 +18,7 @@ ENV USER_UID=${user_uid}
 ENV USER_GID=${user_gid}
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-     sudo curl wget git openssh-server && rm -rf /var/lib/apt/lists/*
-
-
-# SSH
-RUN mkdir -p /var/run/sshd
-RUN ssh-keygen -A
-RUN sed -i 's/^#PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config \
-     && sed -i 's/^#PermitRootLogin .*/PermitRootLogin no/' /etc/ssh/sshd_config
+    sudo curl wget git nano openssh-server && rm -rf /var/lib/apt/lists/*
 
 # Docker
 RUN if [ "$docker_app" = "true" ]; then \
@@ -48,10 +41,9 @@ fi
 # Start custom system
 COPY start.sh /usr/start.sh
 COPY --from=entrydata /entrypoint/create-user.sh /usr/create-user.sh
+COPY --from=entrydata /entrypoint/shh-start.sh /usr/shh-start.sh
 COPY --from=entrydata /entrypoint/docker-start.sh /usr/docker-start.sh
 
-RUN chmod +x /usr/start.sh /usr/create-user.sh /usr/docker-start.sh
+RUN chmod +x /usr/start.sh /usr/create-user.sh /usr/shh-start.sh /usr/docker-start.sh
 
 ENTRYPOINT [ "/usr/start.sh" ]
-
-CMD ["/usr/sbin/sshd", "-D"]

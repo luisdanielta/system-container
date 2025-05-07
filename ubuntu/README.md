@@ -27,6 +27,17 @@ This guide explains how to run a container from a custom Ubuntu image, and assig
    passwd luist
    ```
 
+
+# repoblar etc, for volumes ubuntu_user_etc_luist & ubuntu_user_etc_carlj
+Paso 1: Crear y poblar cada volumen individualmente
+
+docker run --rm -it --name repopulate_luist -v ubuntu_user_etc_luist:/mnt/etc ubuntu:local bash -c "cp -a /etc/. /mnt/etc/"
+
+
+docker run --rm -it --name repopulate_carlj -v ubuntu_user_etc_carlj:/mnt/etc ubuntu:local bash -c "cp -a /etc/. /mnt/etc/"
+
+
+
 ### Option B: Non-Interactive (Recommended for Automation)
 
 ```bash
