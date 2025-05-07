@@ -12,6 +12,15 @@ x-ubuntu-base: &ubuntu-base
     - network_user
     - network_shared
 
+x-ubuntu-nd: &ubuntu-nd
+  image: ubuntu:not-docker
+  restart: no
+  dns:
+    - 8.8.8.8
+  networks:
+    - network_user
+    - network_shared
+
 # system
 x-vol-shared: &vol-shared user_shared:/home/shared
 x-vol-tmp: &vol-tmp user_tmp:/tmp
@@ -45,7 +54,7 @@ services:
       - user_cache:/home/luist/.cache
 
   ubuntu-carlj:
-    <<: *ubuntu-base
+    <<: *ubuntu-nd # out docker
     container_name: "ubuntu-carlj"
     privileged: true
     environment:
