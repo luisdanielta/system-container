@@ -9,10 +9,10 @@ services:
       args:
         conda_ver: 25.1.1-2
     volumes:
-      - conda_app:/opt/conda
+      - app:/opt/conda
     restart: "none"
 
 # That's to make sure you're not a robot
 volumes:
-  conda_app:
-    external: true
+  app:
+    external: false
