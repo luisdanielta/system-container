@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
 # Create group and user
 if ! getent group "${USERNAME}" >/dev/null; then
@@ -15,10 +15,15 @@ if ! id "${USERNAME}" >/dev/null 2>&1; then
     "${USERNAME}"
 fi
 
+# Set user password
+if  ! id "${PSWD}" >/dev/null 2>&1; then
+  echo "${USERNAME}:${PSWD}" | chpasswd
+  echo "Password for user ${USERNAME} set to ${PSWD}"
+fi
+
 # Set user password and grant passwordless sudo
 echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USERNAME}"
 chmod 0440 /etc/sudoers.d/${USERNAME}
 chown -R ${USER_UID}:${USER_GID} /home/${USERNAME}
 
-#exec /usr/sbin/gosu "${USERNAME}" "$@"
 exec "$@"
