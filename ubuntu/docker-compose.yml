@@ -9,7 +9,17 @@ x-ubuntu-base: &ubuntu-base
   dns:
     - 8.8.8.8
   networks:
-    lan_net: {}
+    - network_user
+    - network_shared
+
+x-ubuntu-nd: &ubuntu-nd
+  image: ubuntu:not-docker
+  restart: no
+  dns:
+    - 8.8.8.8
+  networks:
+    - network_user
+    - network_shared
 
 # system
 x-vol-shared: &vol-shared user_shared:/home/shared
@@ -17,74 +27,83 @@ x-vol-tmp: &vol-tmp user_tmp:/tmp
 x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
-x-vol-usr: &vol-usr user_usr:/usr/local
 
-# app
-x-vol-conda: &vol-conda conda_app:/opt/conda
+# App
+x-conda-25: &vol-conda-25 conda_app_25:/opt/conda
+x-conda-4: &vol-conda-4 conda_app_4:/opt/conda
 
+# Machine-specific settings
 services:
   ubuntu-luist:
     <<: *ubuntu-base
     container_name: "ubuntu-luist"
+    privileged: true
+    ports:
+      - "2220:22"
     environment:
       USERNAME: "luist"
+      PSWD: "9031"
     volumes:
-      - *vol-conda
       - *vol-shared
       - *vol-tmp
       - *vol-log
       - *vol-cache
-      - *vol-usr
       - *vol-opt
+      - *vol-conda-25
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
-    networks:
-      lan_net:
-        ipv4_address: 192.168.1.100
 
   ubuntu-carlj:
-    <<: *ubuntu-base
+    <<: *ubuntu-nd # out docker
     container_name: "ubuntu-carlj"
+    privileged: true
     environment:
       USERNAME: "carlj"
+      PSWD: "9031"
+    ports:
+      - "2221:22"
     volumes:
-      - *vol-conda
       - *vol-shared
       - *vol-tmp
       - *vol-log
       - *vol-cache
-      - *vol-usr
       - *vol-opt
+      - *vol-conda-4
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
-    networks:
-      lan_net:
-        ipv4_address: 192.168.1.101
 
 volumes:
-  conda_app:
+  user_data_luist: # change me
+    external: false # true – disables Compose-managed volume - external control
+  
+  user_data_carlj:
+    external: false # change me -  data persistent volume
+  
+  # App
+  conda_app_4:
     external: true
   
-  # User-specific volumes
-  user_data_luist:
-    external: false
-  user_data_carlj:
-    external: false
-  
-  # Shared volumes
+  conda_app_25:
+    external: true
+
+  # Shared volume
+  # Cache
   user_tmp:
     external: false
   user_log:
     external: false
   user_cache:
     external: false
+  
+  # Shared
   user_shared:
     external: false
-  user_usr:
-    external: false
+  
   user_opt:
     external: false
 
 networks:
-  lan_net:
+  network_user:
+    external: true
+  network_shared:
     external: true

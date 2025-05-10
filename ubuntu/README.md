@@ -1,8 +1,45 @@
 ## Ubuntu custom image with conda_app volume
 
-docker volume rm user_data && docker volume create user_data
+### 2. Building the Base Environment
+The base image `ubuntu:local`, which contains system management logic, must be built:
 
-Example creation command:
-docker network create --driver=macvlan --subnet=192.168.1.0/24 --gateway=192.168.1.1 -o parent=enp1s0 lan_net
+```bash
+docker build -t ubuntu:local .
+```
 
-docker network create --driver macvlan --subnet 192.168.1.0/24 --gateway 192.168.1.1 -o parent=enp1s0 lan_net :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
+
+## Set User Password
+This guide explains how to run a container from a custom Ubuntu image, and assign a password to a predefined user created without one.
+
+## 3. Set Password from Host
+
+### Option A: Interactive Method
+
+1. Get a shell as root:
+
+   ```bash
+   docker exec -it -u root ubuntu-luist bash
+   ```
+
+2. Set the user password:
+
+   ```bash
+   passwd luist
+   ```
+
+
+# repoblar etc, for volumes ubuntu_user_etc_luist & ubuntu_user_etc_carlj
+Paso 1: Crear y poblar cada volumen individualmente
+
+docker run --rm -it --name repopulate_luist -v ubuntu_user_etc_luist:/mnt/etc ubuntu:local bash -c "cp -a /etc/. /mnt/etc/"
+
+
+docker run --rm -it --name repopulate_carlj -v ubuntu_user_etc_carlj:/mnt/etc ubuntu:local bash -c "cp -a /etc/. /mnt/etc/"
+
+
+
+### Option B: Non-Interactive (Recommended for Automation)
+
+```bash
+docker exec -u root ubuntu-luist bash -c "echo 'luist:YourSecurePass' | chpasswd"
+```

@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+  repopulate_luist:
+    image: ubuntu:local
+    container_name: repopulate_luist
+    command: bash -c "cp -a /etc/. /mnt/etc/"
+    volumes:
+      - user_etc_luist:/mnt/etc
+    restart: "no"
+
+  repopulate_carlj:
+    image: ubuntu:local
+    container_name: repopulate_carlj
+    command: bash -c "cp -a /etc/. /mnt/etc/"
+    volumes:
+      - user_etc_carlj:/mnt/etc
+    restart: "no"
+
+volumes:
+  user_etc_luist:
+    external: false
+  user_etc_carlj:
+    external: false

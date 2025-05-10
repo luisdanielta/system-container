@@ -1,8 +1,56 @@
 version: '3.5'
 
+services:
+  network:
+    container_name: network-system
+    image: alpine:3.20
+    networks:
+      - file-system
+      - db
+      - service
+      - user
+      - security
+      - shared
+
 networks:
   file-system:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.1.0/24
+          gateway: 10.10.1.1
+  
   db:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.2.0/24
+          gateway: 10.10.2.1
+
   service:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.3.0/24
+          gateway: 10.10.3.1
+
   user:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.4.0/24
+          gateway: 10.10.4.1
+
   security:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.5.0/24
+          gateway: 10.10.5.1
+  
+  shared:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.6.0/24
+          gateway: 10.10.6.1
