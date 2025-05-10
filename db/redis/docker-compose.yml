@@ -1,0 +1,16 @@
+version: '3.5'
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - ./data/redis:/data #you path - default: <path>:/data
+    environment:
+      REDIS_PASSWORD: '6512' #you password
+
+volumes:
+  local-data:
+    driver: local
