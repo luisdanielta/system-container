@@ -1,0 +1,36 @@
+#systemctl disable systemd-resolved.service
+#systemctl stop systemd-resolved
+version: '2.1'
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:v5.7
+    expose:
+      - "53"
+      - "67"
+      - "80"
+      - "443"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "443:443/tcp"
+      - "8800:80/tcp"
+    environment:
+      TZ: 'America/Bogota'
+      WEBPASSWORD: 'pwd'
+    volumes:
+      - '/home/luisdanielta/docker/pihole/etc-pihole/:/etc/pihole/'
+      - '/home/luisdanielta/docker/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      containers:
+        ipv4_address: 172.20.0.7
+
+networks:
+  containers:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
