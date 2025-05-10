@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes: #docker volume create mongodb_data
+      - mongodb_data:/data/db #you path - default: <path>:/data/db
+      - mongodb_data:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'root' #you username
+      MONGO_INITDB_ROOT_PASSWORD: '6512' #you password
+
+
+volumes:
+  mongodb_data:
+    driver: local
