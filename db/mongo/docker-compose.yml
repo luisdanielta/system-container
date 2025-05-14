@@ -1,19 +1,26 @@
 version: '3.5'
 services:
   mongodb:
-    image: mongo
-    container_name: mongodb
+    image: mongo:8.0
+    container_name: mongo_db
     ports:
       - "27017:27017"
-    restart: always
-    volumes: #docker volume create mongodb_data
-      - mongodb_data:/data/db #you path - default: <path>:/data/db
-      - mongodb_data:/data/configdb
+    restart: unless-stopped
+    volumes:
+      - data:/data/db
+      - data:/data/configdb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: 'root' #you username
-      MONGO_INITDB_ROOT_PASSWORD: '6512' #you password
+      MONGO_INITDB_ROOT_USERNAME: 'system-env'
+      MONGO_INITDB_ROOT_PASSWORD: '0000'
 
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.20
 
 volumes:
-  mongodb_data:
-    driver: local
+  data:
+    external: false
+
+networks:
+  network_db:
+    external: true
