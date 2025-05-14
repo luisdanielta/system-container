@@ -1,16 +1,23 @@
 version: '3.5'
 services:
   redis:
-    image: redis
-    container_name: redis
+    image: redis:7.2-alpine
+    container_name: redis_cache
+    restart: unless-stopped
+    volumes:
+      - data:/data
+    environment:
+      REDIS_PASSWORD: '0000'
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.40
     ports:
       - "6379:6379"
-    restart: always
-    volumes:
-      - ./data/redis:/data #you path - default: <path>:/data
-    environment:
-      REDIS_PASSWORD: '6512' #you password
 
 volumes:
-  local-data:
-    driver: local
+  data:
+    external: false
+
+networks:
+  network_db:
+    external: true
