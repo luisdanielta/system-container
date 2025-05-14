@@ -2,15 +2,27 @@ version: '3.5'
 
 services:
   postgres:
-    image: postgres
+    image: postgres:13-alpine
+    container_name: postgres_db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
+      - data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.30
+    
     ports:
       - "5432:5432"
-    restart: always
-    networks:
-      - default
+
+volumes:
+  data:
+    external: false
+
+networks:
+  network_db:
+    external: true
