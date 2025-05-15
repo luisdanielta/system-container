@@ -5,30 +5,24 @@ version: '3.5'
 # Shared settings for all Ubuntu services
 x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
-  restart: no
+  restart: unless-stopped
   dns:
-    - 8.8.8.8
-  networks:
-    - network_user
-    - network_shared
+    - 10.10.4.2
 
 x-ubuntu-nd: &ubuntu-nd
   image: ubuntu:not-docker
-  restart: no
+  restart: unless-stopped
   dns:
-    - 8.8.8.8
-  networks:
-    - network_user
-    - network_shared
+    - 10.10.4.2
 
-# system
+# System
 x-vol-shared: &vol-shared user_shared:/home/shared
 x-vol-tmp: &vol-tmp user_tmp:/tmp
 x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
 
-# App
+# Conda volumes
 x-conda-25: &vol-conda-25 conda_app_25:/opt/conda
 x-conda-4: &vol-conda-4 conda_app_4:/opt/conda
 
@@ -42,7 +36,7 @@ services:
       - "2220:22"
     environment:
       USERNAME: "luist"
-      PSWD: "9031"
+      PSWD: "0000"
     volumes:
       - *vol-shared
       - *vol-tmp
@@ -53,13 +47,18 @@ services:
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
 
+    networks:
+      network_user:
+        ipv4_address: 10.10.4.10
+      network_shared:
+
   ubuntu-carlj:
     <<: *ubuntu-nd # out docker
     container_name: "ubuntu-carlj"
     privileged: true
     environment:
       USERNAME: "carlj"
-      PSWD: "9031"
+      PSWD: "0000"
     ports:
       - "2221:22"
     volumes:
@@ -71,34 +70,33 @@ services:
       - *vol-conda-4
       - user_data_carlj:/home/carlj
       - user_cache:/home/carlj/.cache
+    
+    networks:
+      network_user:
+        ipv4_address: 10.10.4.11
+      network_shared:
 
 volumes:
-  user_data_luist: # change me
-    external: false # true – disables Compose-managed volume - external control
-  
+  user_data_luist:
+    external: false
   user_data_carlj:
-    external: false # change me -  data persistent volume
+    external: false
   
-  # App
+  # Conda volumes
   conda_app_4:
     external: true
-  
   conda_app_25:
     external: true
 
-  # Shared volume
-  # Cache
+  # Shared volumes
   user_tmp:
     external: false
   user_log:
     external: false
   user_cache:
     external: false
-  
-  # Shared
   user_shared:
     external: false
-  
   user_opt:
     external: false
 

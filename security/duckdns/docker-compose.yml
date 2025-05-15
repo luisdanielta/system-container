@@ -1,0 +1,25 @@
+version: "3.5"
+services:
+  duckdns:
+    image: linuxserver/duckdns:versión-a880d4d9
+    container_name: duckdns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Bogota
+      - SUBDOMAINS=,
+      - TOKEN=
+      - LOG_FILE=true
+    volumes:
+      - data:/config
+    restart: unless-stopped
+    networks:
+      - network_security
+
+networks:
+  network_security:
+    external: true
+
+volumes:
+  data:
+    external: false

@@ -1,7 +1,5 @@
 ## Network system
 
-command: tail -f /dev/null # Keeps container alive to trigger network creation
-
 sudo nano /etc/sysctl.conf
 net.ipv4.ip_forward = 1
 sudo sysctl -p

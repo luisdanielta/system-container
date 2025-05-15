@@ -1,0 +1,29 @@
+version: "3.5"
+services:
+  rstudio:
+    container_name: rstudio
+    image: rocker/geospatial:4.4
+    ports:
+      - 8787:8787
+    environment:
+      PASSWORD: "password"
+      DISABLE_AUTH: true
+    volumes:
+      - config:/home/rstudio/.config/rstudio
+      - workspace:/home/rstudio
+
+    networks:
+      network_service:
+        ipv4_address: 10.10.3.40
+    dns:
+      - 10.10.3.2
+
+networks:
+  network_service:
+    external: true
+
+volumes:
+  config:
+    external: false
+  workspace:
+    external: false

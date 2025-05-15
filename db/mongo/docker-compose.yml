@@ -1,0 +1,26 @@
+version: '3.5'
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    volumes:
+      - data:/data/db
+      - data:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'system-env'
+      MONGO_INITDB_ROOT_PASSWORD: '0000'
+
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.20
+
+volumes:
+  data:
+    external: false
+
+networks:
+  network_db:
+    external: true
