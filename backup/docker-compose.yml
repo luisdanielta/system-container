@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+  backup:
+    container_name: backup
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: no
+    volumes:
+      - ./restore:/mnt/restore
+      - ubuntu_user_data_luist:/mnt/ubuntu/user_data_luist
+      - ubuntu_user_data_carlj:/mnt/ubuntu/user_data_carlj
+      - ubuntu_user_shared:/mnt/ubuntu/user_shared
+
+volumes:
+  ubuntu_user_data_luist:
+    external: true
+  ubuntu_user_data_carlj:
+    external: true
+  ubuntu_user_shared:
+    external: true
