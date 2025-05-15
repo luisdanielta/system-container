@@ -5,13 +5,13 @@ version: '3.5'
 # Shared settings for all Ubuntu services
 x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
-  restart: no
+  restart: unless-stopped
   dns:
     - 10.10.4.2
 
 x-ubuntu-nd: &ubuntu-nd
   image: ubuntu:not-docker
-  restart: no
+  restart: unless-stopped
   dns:
     - 10.10.4.2
 
@@ -36,7 +36,7 @@ services:
       - "2220:22"
     environment:
       USERNAME: "luist"
-      PSWD: "9031"
+      PSWD: "0000"
     volumes:
       - *vol-shared
       - *vol-tmp
@@ -58,7 +58,7 @@ services:
     privileged: true
     environment:
       USERNAME: "carlj"
-      PSWD: "9031"
+      PSWD: "0000"
     ports:
       - "2221:22"
     volumes:
