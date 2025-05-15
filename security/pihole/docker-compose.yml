@@ -3,12 +3,6 @@ services:
   pihole:
     container_name: dns_pihole
     image: pihole/pihole:v5.7
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "443:443/tcp"
-      - "8000:80/tcp"
     environment:
       TZ: 'America/Bogota'
       WEBPASSWORD: '0000'
@@ -18,12 +12,18 @@ services:
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
+    ports:
+      - 8081:80
     networks:
       network_security:
-        ipv4_address: 10.10.5.2
+        ipv4_address: 10.10.5.2 # :53/tcp/udp :67/udp :443/tcp :80/tcp
+      network_service:
+        ipv4_address: 10.10.3.2
 
 networks:
   network_security:
+    external: true
+  network_service:
     external: true
 
 volumes:

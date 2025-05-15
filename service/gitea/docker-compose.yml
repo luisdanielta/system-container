@@ -1,7 +1,6 @@
 version: "3.5"
-
 services:
-  gitea-server:
+  gitea:
     image: docker.gitea.com/gitea:1.23.7
     container_name: gitea
     environment:
@@ -10,14 +9,15 @@ services:
     restart: unless-stopped
     networks:
       network_service:
-        ipv4_address: 10.10.3.2
+        ipv4_address: 10.10.3.10 # :3000 :22
     volumes:
       - data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    expose:
-      - "3000"
-      - "22"
+    ports:
+      - 3000:3000
+    dns:
+      - 10.10.3.2
 
 volumes:
   data:
