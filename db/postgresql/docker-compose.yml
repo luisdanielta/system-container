@@ -11,13 +11,9 @@ services:
     volumes:
       - data:/var/lib/postgresql/data
     restart: unless-stopped
-
     networks:
       network_db:
-        ipv4_address: 10.10.2.30
-    
-    ports:
-      - "5432:5432"
+        ipv4_address: 10.10.2.30 #:5432
 
 volumes:
   data:
