@@ -4,6 +4,7 @@ services:
   network:
     container_name: network-system
     image: alpine:3.20
+    command: tail -f /dev/null # Keeps container alive to trigger network creation
     networks:
       - file-system
       - db
