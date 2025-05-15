@@ -17,6 +17,8 @@ services:
     networks:
       network_security:
         ipv4_address: 10.10.5.2 # :53/tcp/udp :67/udp :443/tcp :80/tcp
+      network_user:
+        ipv4_address: 10.10.4.2
       network_service:
         ipv4_address: 10.10.3.2
 
@@ -24,6 +26,8 @@ networks:
   network_security:
     external: true
   network_service:
+    external: true
+  network_user:
     external: true
 
 volumes:
