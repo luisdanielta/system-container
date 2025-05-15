@@ -1,10 +1,11 @@
+version: '3.5'
 services:
   hbbs:
     container_name: rustdesk-hbbs
     image: rustdesk/rustdesk-server:1.1.9-amd64 # version important
     command: hbbs
     volumes:
-      - rustdesk:/root
+      - data:/root
     network_mode: "host"
     depends_on:
       - hbbr
@@ -15,9 +16,10 @@ services:
     image: rustdesk/rustdesk-server:1.1.9-amd64
     command: hbbr
     volumes:
-      - rustdesk:/root
+      - data:/root
     network_mode: "host"
     restart: unless-stopped
 
 volumes:
-  rustdesk:
+  data:
+    external: false
