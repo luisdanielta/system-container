@@ -1,28 +1,29 @@
-version: "3"
-
+version: "3.5"
 services:
   rstudio:
     container_name: rstudio
-    image: rocker/geospatial:4.4 #4.4
+    image: rocker/geospatial:4.4
     ports:
-      - "8787:8787"
+      - 8787:8787
     environment:
-      PASSWORD: "CAL0813focas?"
+      PASSWORD: "password"
       DISABLE_AUTH: true
     volumes:
-      - rstudio_config:/home/rstudio/.config/rstudio
-      - rstudio_workspace:/home/rstudio
+      - config:/home/rstudio/.config/rstudio
+      - workspace:/home/rstudio
 
     networks:
-      pihole_net:
-        ipv4_address: 192.168.2.11
+      network_service:
+        ipv4_address: 10.10.3.40
     dns:
-      - 192.168.2.2
+      - 10.10.3.2
 
 networks:
-  pihole_net:
+  network_service:
     external: true
 
 volumes:
-  rstudio_config:
-  rstudio_workspace:
+  config:
+    external: false
+  workspace:
+    external: false
