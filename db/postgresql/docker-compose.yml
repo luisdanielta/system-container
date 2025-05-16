@@ -21,8 +21,6 @@ services:
       - POSTGRES_PASSWORD=penpot
 
 volumes:
-  data:
-    external: false
   penpot:
     external: false
 

@@ -14,8 +14,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  data:
-    external: false
   penpot:
     external: false
 
