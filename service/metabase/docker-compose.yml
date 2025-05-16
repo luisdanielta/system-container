@@ -12,7 +12,6 @@ services:
     volumes:
       - data:/metabase-data
       - sqlite_data:/data
-    
     networks:
       network_service:
         ipv4_address: 10.10.3.11
@@ -20,7 +19,6 @@ services:
         ipv4_address: 10.10.2.11
     dns:
         - 10.10.3.2
-
     # health
     healthcheck:
       test: curl --fail -I http://localhost:3000/api/health || exit 1
