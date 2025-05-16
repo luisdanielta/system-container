@@ -1,27 +1,14 @@
 version: '3.5'
 services:
-  redis:
-    image: redis:7.2
-    container_name: redis_cache
-    restart: unless-stopped
-    volumes:
-      - data:/data
-    environment:
-      REDIS_PASSWORD: '0000'
-    networks:
-      network_db:
-        ipv4_address: 10.10.2.40
-    ports:
-      - "6379:6379"
-  
   penpot_redis:
     image: redis:7.2
     container_name: penpot_redis
+    #REDIS_PASSWORD:
     volumes:
       - penpot:/data
     networks:
       network_db:
-        ipv4_address: 10.10.2.41
+        ipv4_address: 10.10.2.41 # :6379
       network_service:
         ipv4_address: 10.10.3.150
     restart: unless-stopped

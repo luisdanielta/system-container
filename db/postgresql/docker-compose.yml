@@ -1,22 +1,8 @@
 version: '3.5'
 
-services:
-  postgres:
-    image: postgres:13-alpine
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    volumes:
-      - data:/var/lib/postgresql/data
-    restart: unless-stopped
-    networks:
-      network_db:
-        ipv4_address: 10.10.2.30 # :5432
-  
+services:  
   penpot_postgres:
-    image: "postgres:15"
+    image: postgres:15
     container_name: penpot_postgres
     networks:
       network_db:
