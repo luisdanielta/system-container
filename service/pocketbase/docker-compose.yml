@@ -9,6 +9,10 @@ services:
     image: pocketbase:local
     container_name: pocketbase_local
     restart: unless-stopped
+    volumes:
+      - sqlite_data:/data
+    environment:
+      - DATA_DIR=/data/pocketbase_local
     ports:
       - 8090:8090
     networks:
@@ -19,4 +23,8 @@ services:
 
 networks:
   network_service:
+    external: true
+
+volumes:
+  sqlite_data:
     external: true
