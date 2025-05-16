@@ -13,7 +13,6 @@ services:
     stop_signal: SIGINT
     volumes:
       - penpot:/var/lib/postgresql/data
-
     environment:
       - POSTGRES_INITDB_ARGS=--data-checksums
       - POSTGRES_DB=penpot
