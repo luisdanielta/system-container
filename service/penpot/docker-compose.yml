@@ -18,17 +18,17 @@ services:
     volumes:
       - assets:/opt/data/assets
     depends_on:
-      - penpot-backend
-      - penpot-exporter
+      - penpot_backend
+      - penpot_exporter
     environment:
       <<: *penpot-flags
-      PENPOT_BACKEND_URI: http://penpot-backend:6060
-      PENPOT_EXPORTER_URI: http://penpot-exporter:6061
+      PENPOT_BACKEND_URI: http://penpot_backend:6060
+      PENPOT_EXPORTER_URI: http://penpot_exporter:6061
       PENPOT_TELEMETRY_ENABLED: false
 
-  penpot-backend:
+  penpot_backend:
     image: penpotapp/backend:2.6.0
-    container_name: penpot-backend
+    container_name: penpot_backend
     networks:
       network_service:
         ipv4_address: 10.10.3.23
@@ -49,9 +49,9 @@ services:
       PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
       PENPOT_TELEMETRY_ENABLED: false
 
-  penpot-exporter:
+  penpot_exporter:
     image: penpotapp/exporter:2.6.0
-    container_name: penpot-exporter
+    container_name: penpot_exporter
     networks:
       network_service:
         ipv4_address: 10.10.3.22
@@ -59,7 +59,7 @@ services:
       - 10.10.3.2
     restart: unless-stopped
     environment:
-      PENPOT_PUBLIC_URI: http://penpot-frontend
+      PENPOT_PUBLIC_URI: http://penpot_frontend
       PENPOT_REDIS_URI: redis://10.10.3.150:6379/0
 
 networks:
