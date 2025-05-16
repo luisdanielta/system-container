@@ -1,9 +1,12 @@
 version: '3.5'
+
 services:
   sqlite:
     image: alpine:3.20
-    command: tail -f /dev/null # Keeps container alive to trigger volume creation
+    container_name: sqlite_db
     restart: unless-stopped
+    entrypoint: sh
+    command: -c "tail -f /dev/null"
     volumes:
       - data:/data
 
