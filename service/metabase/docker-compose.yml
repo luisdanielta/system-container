@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
     volumes:
       - data:/metabase-data
+      - sqlite_data:/data
     
     networks:
       network_service:
@@ -30,6 +31,8 @@ services:
 volumes:
   data:
     external: false
+  sqlite_data:
+    external: true
 
 networks:
   network_service:
