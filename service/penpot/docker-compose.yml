@@ -3,119 +3,69 @@ version: '3.5'
 x-flags: &penpot-flags
   PENPOT_FLAGS: disable-email-verification enable-prepl-server enable-registration disable-secure-session-cookies
 
-x-uri: &penpot-public-uri
-  PENPOT_PUBLIC_URI: http://0.0.0.0:7050
-
-networks:
-  pihole_net:
-    external: true
-
-volumes:
-  penpot_postgres_v15:
-  penpot_assets:
-
-
 services:
-
-  penpot-frontend:
-    image: "penpotapp/frontend:2.3.3"
-    container_name: penpot-frontend
+  penpot_frontend:
+    image: penpotapp/frontend:2.6.0
+    container_name: penpot_frontend
     networks:
-      pihole_net:
-        ipv4_address: 192.168.2.30
+      network_service:
+        ipv4_address: 10.10.3.24
     dns:
-      - 192.168.1.2
+      - 10.10.3.2
     restart: unless-stopped
     ports:
-      - 7050:80
-
+      - 7050:8080
     volumes:
-      - penpot_assets:/opt/data/assets
-
+      - assets:/opt/data/assets
     depends_on:
       - penpot-backend
       - penpot-exporter
-
-    labels:
-      - "traefik.enable=true"
-
     environment:
       <<: *penpot-flags
+      PENPOT_BACKEND_URI: http://penpot-backend:6060
+      PENPOT_EXPORTER_URI: http://penpot-exporter:6061
+      PENPOT_TELEMETRY_ENABLED: false
 
   penpot-backend:
-    image: "penpotapp/backend:2.3.3"
+    image: penpotapp/backend:2.6.0
     container_name: penpot-backend
     networks:
-      pihole_net:
-        ipv4_address: 192.168.2.31
+      network_service:
+        ipv4_address: 10.10.3.23
     dns:
-      - 192.168.1.2
+      - 10.10.3.2
     restart: unless-stopped
-
     volumes:
-      - penpot_assets:/opt/data/assets
-
-    depends_on:
-      - penpot-postgres
-      - penpot-redis
-
+      - assets:/opt/data/assets
     environment:
-      <<: [ *penpot-flags, *penpot-public-uri ]
+      <<: *penpot-flags
+      PENPOT_PUBLIC_URI: http://0.0.0.0:7050
       PENPOT_PREPL_HOST: 0.0.0.0
-      PENPOT_DATABASE_URI: postgresql://penpot-postgres/penpot
+      PENPOT_DATABASE_URI: postgresql://10.10.3.151:5432/penpot
       PENPOT_DATABASE_USERNAME: penpot
       PENPOT_DATABASE_PASSWORD: penpot
-
-      PENPOT_REDIS_URI: redis://penpot-redis/0
-
+      PENPOT_REDIS_URI: redis://10.10.3.150:6379/0
       PENPOT_ASSETS_STORAGE_BACKEND: assets-fs
       PENPOT_STORAGE_ASSETS_FS_DIRECTORY: /opt/data/assets
-
       PENPOT_TELEMETRY_ENABLED: false
 
   penpot-exporter:
-    image: "penpotapp/exporter:2.3.3"
+    image: penpotapp/exporter:2.6.0
     container_name: penpot-exporter
     networks:
-      pihole_net:
-        ipv4_address: 192.168.2.32
+      network_service:
+        ipv4_address: 10.10.3.22
     dns:
-      - 192.168.1.2
+      - 10.10.3.2
     restart: unless-stopped
-
     environment:
-
       PENPOT_PUBLIC_URI: http://penpot-frontend
+      PENPOT_REDIS_URI: redis://10.10.3.150:6379/0
 
-      ## Redis is used for the websockets notifications.
-      PENPOT_REDIS_URI: redis://penpot-redis/0
+networks:
+  network_service:
+    external: true
 
-  penpot-postgres:
-    image: "postgres:15"
-    container_name: penpot-postgres
-    networks:
-      pihole_net:
-        ipv4_address: 192.168.2.33
-    dns:
-      - 192.168.1.2
-    restart: unless-stopped
-    stop_signal: SIGINT
-
-    volumes:
-      - penpot_postgres_v15:/var/lib/postgresql/data
-
-    environment:
-      - POSTGRES_INITDB_ARGS=--data-checksums
-      - POSTGRES_DB=penpot
-      - POSTGRES_USER=penpot
-      - POSTGRES_PASSWORD=penpot
-
-  penpot-redis:
-    image: redis:7.2
-    container_name: penpot-redis
-    networks:
-      pihole_net:
-        ipv4_address: 192.168.2.34
-    dns:
-      - 192.168.1.2
-    restart: unless-stopped
+volumes:
+  assets:
+    external: false
