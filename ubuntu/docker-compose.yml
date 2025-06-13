@@ -7,13 +7,13 @@ x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
   restart: unless-stopped
   dns:
-    - 10.10.4.2
+    - 10.10.4.3
 
 x-ubuntu-nd: &ubuntu-nd
   image: ubuntu:not-docker
   restart: unless-stopped
   dns:
-    - 10.10.4.2
+    - 10.10.4.3
 
 # System
 x-vol-shared: &vol-shared user_shared:/home/shared

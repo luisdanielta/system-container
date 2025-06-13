@@ -11,7 +11,7 @@ services:
       network_service:
         ipv4_address: 10.10.3.24
     dns:
-      - 10.10.3.2
+      - 10.10.3.3
     restart: unless-stopped
     ports:
       - 7050:8080
@@ -33,7 +33,7 @@ services:
       network_service:
         ipv4_address: 10.10.3.23
     dns:
-      - 10.10.3.2
+      - 10.10.3.3
     restart: unless-stopped
     volumes:
       - assets:/opt/data/assets
@@ -56,7 +56,7 @@ services:
       network_service:
         ipv4_address: 10.10.3.22
     dns:
-      - 10.10.3.2
+      - 10.10.3.3
     restart: unless-stopped
     environment:
       PENPOT_PUBLIC_URI: http://penpot_frontend
