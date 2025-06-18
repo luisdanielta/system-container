@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Default USER_UID and USER_GID
+USER_UID=${USER_UID:-1000}
+USER_GID=${USER_GID:-1000}
+
 if ! id "${USERNAME}" >/dev/null 2>&1; then
   if ! getent group "${USERNAME}" >/dev/null; then
     groupadd --gid "${USER_GID}" "${USERNAME}"
