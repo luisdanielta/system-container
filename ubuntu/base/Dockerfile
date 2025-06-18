@@ -8,6 +8,7 @@ LABEL description="Ubuntu, passwordless sudo, and SSH user via ENV."
 ARG user_uid=1000
 ARG user_gid=1000
 ARG TZ=America/Bogota
+ARG gui=false
 
 ARG docker_app=true
 ENV DOCKER_APP=${docker_app}
@@ -22,7 +23,15 @@ ENV USER_UID=${user_uid}
 ENV USER_GID=${user_gid}
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    sudo openssh-server && rm -rf /var/lib/apt/lists/*
+    sudo supervisor openssh-server passwd \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# SSH configuration
+RUN mkdir -p /var/run/sshd && \
+    ssh-keygen -A && \
+    echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 
 # App essentials
 RUN if [ "$app_essentials" = "true" ]; then \
@@ -52,11 +61,13 @@ RUN if [ "$docker_app" = "true" ]; then \
     echo "Docker installation skipped."; \
     fi
 
-COPY start.sh /usr/start.sh
-COPY --from=entrydata /entrypoint/create-user.sh /usr/create-user.sh
-COPY --from=entrydata /entrypoint/shh-start.sh /usr/shh-start.sh
-COPY --from=entrydata /entrypoint/docker-start.sh /usr/docker-start.sh
+COPY --from=entrydata /entrypoint/create-user.sh /usr/local/bin/create-user.sh
+COPY --from=entrydata /entrypoint/start-dockerd.sh /usr/local/bin/start-dockerd.sh
+COPY supervisord.conf /etc/supervisord.conf
 
-RUN chmod +x /usr/start.sh /usr/create-user.sh /usr/shh-start.sh /usr/docker-start.sh
+# Set up the user
+RUN chmod +x /usr/local/bin/create-user.sh
+RUN chmod +x /usr/local/bin/start-dockerd.sh
 
-ENTRYPOINT [ "/usr/start.sh" ]
+ENTRYPOINT [ "/usr/local/bin/create-user.sh" ]
+CMD [ "supervisord", "-c", "/etc/supervisord.conf" ]

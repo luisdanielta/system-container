@@ -3,19 +3,24 @@ services:
   ubuntu:
     image: ubuntu:local
     container_name: ubuntu-maintainer
+    privileged: true
     build:
       context: .
       dockerfile: Dockerfile
       args:
         docker_app: true
         app_essentials: true
-  
-  ubuntu-nd:
-    image: ubuntu:not-docker
-    container_name: ubuntu-maintainer-nd
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        docker_app: false
-        app_essentials: true
+    environment:
+      USERNAME: "maintainer"
+      PSWD: "0000"
+    ports:
+      - "2222:22"
+    dns:
+      - 8.8.8.8
+    
+    networks:
+      - network_user
+
+networks:
+  network_user:
+    external: true
