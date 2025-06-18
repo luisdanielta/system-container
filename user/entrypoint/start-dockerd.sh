@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-if [ "$DOCKER_APP" != "true" ]; then
-  echo "[INFO] DOCKER_APP is not true. Skipping dockerd."
-  exec "$@"
-  exit 0
-fi
-
 echo "[INFO] Starting Docker daemon..."
 dockerd > /var/log/dockerd.log 2>&1 &
 
@@ -15,6 +9,11 @@ while ! docker info > /dev/null 2>&1; do
 done
 
 echo "[INFO] Docker daemon is up"
+
+if ! docker info > /dev/null 2>&1; then
+  echo "[ERROR] Docker daemon failed to start. Exiting."
+  exit 1
+fi
 
 CONFIG_MARKER="/.docker_configured"
 if [ ! -f "$CONFIG_MARKER" ]; then
