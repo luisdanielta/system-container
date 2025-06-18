@@ -3,6 +3,7 @@ services:
   ubuntu:
     image: ubuntu:local
     container_name: ubuntu-maintainer
+    privileged: true
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,10 +13,10 @@ services:
   
   ubuntu-nd:
     image: ubuntu:not-docker
-    container_name: ubuntu-maintainer-nd
+    container_name: ubuntu-nd
     build:
       context: .
       dockerfile: Dockerfile
       args:
         docker_app: false
-        app_essentials: true
+        app_essentials: false

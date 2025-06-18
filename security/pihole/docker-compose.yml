@@ -14,13 +14,17 @@ services:
     restart: unless-stopped
     ports:
       - 8081:80
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 443:443
     networks:
       network_security:
-        ipv4_address: 10.10.5.2 # :53/tcp/udp :67/udp :443/tcp :80/tcp
+        ipv4_address: 10.10.5.3 # :53/tcp/udp :67/udp :443/tcp :80/tcp
       network_user:
-        ipv4_address: 10.10.4.2
+        ipv4_address: 10.10.4.3
       network_service:
-        ipv4_address: 10.10.3.2
+        ipv4_address: 10.10.3.3
 
 networks:
   network_security:
