@@ -10,17 +10,13 @@ services:
       args:
         docker_app: true
         app_essentials: true
-    environment:
-      USERNAME: "maintainer"
-      PSWD: "0000"
-    ports:
-      - "2222:22"
-    dns:
-      - 8.8.8.8
-    
-    networks:
-      - network_user
-
-networks:
-  network_user:
-    external: true
+  
+  ubuntu-nd:
+    image: ubuntu:not-docker
+    container_name: ubuntu-nd
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        docker_app: false
+        app_essentials: false
