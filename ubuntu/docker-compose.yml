@@ -6,6 +6,7 @@ version: '3.5'
 x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
   restart: unless-stopped
+  privileged: true
   dns:
     - 10.10.4.3
 
@@ -31,7 +32,6 @@ services:
   ubuntu-luist:
     <<: *ubuntu-base
     container_name: "ubuntu-luist"
-    privileged: true
     ports:
       - "2220:22"
     environment:
