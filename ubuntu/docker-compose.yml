@@ -55,7 +55,6 @@ services:
   ubuntu-carlj:
     <<: *ubuntu-nd # out docker
     container_name: "ubuntu-carlj"
-    privileged: true
     environment:
       USERNAME: "carlj"
       PSWD: "0000"
