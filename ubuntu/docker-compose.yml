@@ -48,14 +48,13 @@ services:
       network_user:
         ipv4_address: 10.10.4.10
       network_shared:
+      network_service:
 
 volumes:
   user_data_luist:
     external: false
-  
   dind_luist:
     external: false
-  
   etc_luist:
     external: false
 
@@ -75,4 +74,6 @@ networks:
   network_user:
     external: true
   network_shared:
+    external: true
+  network_service:
     external: true
