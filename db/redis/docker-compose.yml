@@ -10,11 +10,33 @@ services:
       network_db:
         ipv4_address: 10.10.2.41 # :6379
       network_service:
-        ipv4_address: 10.10.3.150
+        ipv4_address: 10.10.3.141
     restart: unless-stopped
+  
+  langfuse_redis:
+    image: redis:7.2
+    container_name: langfuse_redis
+    restart: unless-stopped
+    # CHANGEME: row below to secure redis password
+    command: >
+      --requirepass ${REDIS_AUTH:-myredissecret}
+    volumes:
+      - langfuse:/data
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.42 # :6379
+      network_service:
+        ipv4_address: 10.10.3.142
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
 
 volumes:
   penpot:
+    external: false
+  langfuse:
     external: false
 
 networks:
