@@ -6,6 +6,7 @@ version: '3.5'
 x-ubuntu-base: &ubuntu-base
   image: ubuntu:local
   restart: unless-stopped
+  privileged: true
   dns:
     - 10.10.4.3
 
@@ -22,71 +23,40 @@ x-vol-log: &vol-log user_log:/var/log
 x-vol-cache: &vol-cache user_cache:/var/cache
 x-vol-opt: &vol-opt user_opt:/opt
 
-# Conda volumes
-x-conda-25: &vol-conda-25 conda_app_25:/opt/conda
-x-conda-4: &vol-conda-4 conda_app_4:/opt/conda
-
 # Machine-specific settings
 services:
   ubuntu-luist:
     <<: *ubuntu-base
     container_name: "ubuntu-luist"
-    privileged: true
     ports:
       - "2220:22"
     environment:
       USERNAME: "luist"
-      PSWD: "0000"
+      PSWD: "3956"
     volumes:
       - *vol-shared
       - *vol-tmp
       - *vol-log
       - *vol-cache
       - *vol-opt
-      - *vol-conda-25
       - user_data_luist:/home/luist
       - user_cache:/home/luist/.cache
+      - dind_luist:/var/lib/docker
+      - etc_luist:/etc
 
     networks:
       network_user:
         ipv4_address: 10.10.4.10
       network_shared:
-
-  ubuntu-carlj:
-    <<: *ubuntu-nd # out docker
-    container_name: "ubuntu-carlj"
-    privileged: true
-    environment:
-      USERNAME: "carlj"
-      PSWD: "0000"
-    ports:
-      - "2221:22"
-    volumes:
-      - *vol-shared
-      - *vol-tmp
-      - *vol-log
-      - *vol-cache
-      - *vol-opt
-      - *vol-conda-4
-      - user_data_carlj:/home/carlj
-      - user_cache:/home/carlj/.cache
-    
-    networks:
-      network_user:
-        ipv4_address: 10.10.4.11
-      network_shared:
+      network_service:
 
 volumes:
   user_data_luist:
     external: false
-  user_data_carlj:
+  dind_luist:
     external: false
-  
-  # Conda volumes
-  conda_app_4:
-    external: true
-  conda_app_25:
-    external: true
+  etc_luist:
+    external: false
 
   # Shared volumes
   user_tmp:
@@ -104,4 +74,6 @@ networks:
   network_user:
     external: true
   network_shared:
+    external: true
+  network_service:
     external: true

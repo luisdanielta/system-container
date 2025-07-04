@@ -3,7 +3,6 @@ services:
   network:
     container_name: network-system
     image: alpine:3.20
-    entrypoint: sh
     command: tail -f /dev/null # Keeps container alive to trigger network creation
     restart: unless-stopped
     networks:
