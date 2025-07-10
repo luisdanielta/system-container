@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  coder:
+    image: ghcr.io/coder/coder:v2.15.3
+    container_name: coder-server
+    ports:
+      - 7089:7080
+    environment:
+      CODER_PG_CONNECTION_URL: "postgresql://postgres_shared:postgres_shared@10.10.3.153/coder?sslmode=disable"
+      CODER_HTTP_ADDRESS: "0.0.0.0:7080"
+      CODER_ACCESS_URL: "${CODER_ACCESS_URL}"
+    group_add:
+      - "998" # docker group on host
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - home:/home/coder
+
+    restart: unless-stopped
+    networks:
+      network_service:
+
+    dns:
+      - 10.10.3.3
+
+volumes:
+  home:
+    external: false
+
+networks:
+  network_service:
+    external: true
