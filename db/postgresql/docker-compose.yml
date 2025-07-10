@@ -53,6 +53,7 @@ services:
       POSTGRES_USER: postgres_shared
       POSTGRES_PASSWORD: postgres_shared # Custom password
       POSTGRES_DB: postgres
+      POSTGRES_INITDB_ARGS: --data-checksums
     networks:
       network_db:
         ipv4_address: 10.10.2.33 # :5432
