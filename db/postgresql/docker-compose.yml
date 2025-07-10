@@ -1,24 +1,6 @@
 version: '3.5'
 
 services:  
-  penpot_postgres:
-    image: postgres:15
-    container_name: penpot_postgres
-    networks:
-      network_db:
-        ipv4_address: 10.10.2.31 # :5432
-      network_service:
-        ipv4_address: 10.10.3.151
-    restart: unless-stopped
-    stop_signal: SIGINT
-    volumes:
-      - penpot:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_INITDB_ARGS=--data-checksums
-      - POSTGRES_DB=penpot
-      - POSTGRES_USER=penpot
-      - POSTGRES_PASSWORD=penpot
-
   langfuse_postgres:
     image: postgres:15
     restart: unless-stopped
