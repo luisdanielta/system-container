@@ -1,18 +1,5 @@
 version: '3.5'
 services:
-  penpot_redis:
-    image: redis:7.2
-    container_name: penpot_redis
-    #REDIS_PASSWORD:
-    volumes:
-      - penpot:/data
-    networks:
-      network_db:
-        ipv4_address: 10.10.2.41 # :6379
-      network_service:
-        ipv4_address: 10.10.3.141
-    restart: unless-stopped
-  
   langfuse_redis:
     image: redis:7.2
     container_name: langfuse_redis
@@ -52,8 +39,6 @@ services:
 
 
 volumes:
-  penpot:
-    external: false
   langfuse:
     external: false
   shared:
