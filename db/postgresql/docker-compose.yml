@@ -39,11 +39,34 @@ services:
         ipv4_address: 10.10.3.152
     volumes:
       - langfuse:/var/lib/postgresql/data
+  
+  shared_postgres:
+    image: postgres:15
+    restart: unless-stopped
+    container_name: shared_postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    environment:
+      POSTGRES_USER: postgres_shared
+      POSTGRES_PASSWORD: postgres_shared # Custom password
+      POSTGRES_DB: postgres
+    networks:
+      network_db:
+        ipv4_address: 10.10.2.33 # :5432
+      network_service:
+        ipv4_address: 10.10.3.153
+    volumes:
+      - shared:/var/lib/postgresql/data
 
 volumes:
   penpot:
     external: false
   langfuse:
+    external: false
+  shared:
     external: false
 
 networks:
