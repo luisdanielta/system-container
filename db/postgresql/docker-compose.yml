@@ -45,8 +45,6 @@ services:
       - shared:/var/lib/postgresql/data
 
 volumes:
-  penpot:
-    external: false
   langfuse:
     external: false
   shared:
