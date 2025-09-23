@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   workspace:
     image: alpine:3.20
@@ -7,7 +6,10 @@ services:
     command: tail -f /dev/null
     volumes:
       - data:/data
+      - research:/research
 
 volumes:
+  research:
+    external: false
   data:
     external: false
