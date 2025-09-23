@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   network:
     container_name: network-system
