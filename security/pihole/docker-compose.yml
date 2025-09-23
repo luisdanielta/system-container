@@ -1,8 +1,7 @@
-version: '3.5'
 services:
   pihole:
     container_name: dns_pihole
-    image: pihole/pihole:v5.7
+    image: pihole/pihole:2025.07.1
     environment:
       TZ: 'America/Bogota'
       WEBPASSWORD: '0000'
@@ -20,11 +19,11 @@ services:
       - 443:443
     networks:
       network_security:
-        ipv4_address: 10.10.5.3 # :53/tcp/udp :67/udp :443/tcp :80/tcp
+        ipv4_address: 10.10.5.200 # :53/tcp/udp :67/udp :443/tcp :80/tcp
       network_user:
-        ipv4_address: 10.10.4.3
+        ipv4_address: 10.10.4.200
       network_service:
-        ipv4_address: 10.10.3.3
+        ipv4_address: 10.10.3.200
 
 networks:
   network_security:
