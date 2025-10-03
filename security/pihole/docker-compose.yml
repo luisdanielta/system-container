@@ -4,7 +4,9 @@ services:
     image: pihole/pihole:2025.07.1
     environment:
       TZ: 'America/Bogota'
-      WEBPASSWORD: '0000'
+      FTLCONF_dns_upstreams: "10.10.5.201#5053"
+      FTLCONF_dns_listeningMode: "all"
+      FTLCONF_webserver_api_password: "0000"
     volumes:
       - data:/etc/pihole/
       - dnsmasq:/etc/dnsmasq.d/
