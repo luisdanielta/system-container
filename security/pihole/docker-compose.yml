@@ -6,7 +6,7 @@ services:
       TZ: 'America/Bogota'
       FTLCONF_dns_upstreams: "10.10.5.201#5053"
       FTLCONF_dns_listeningMode: "all"
-      FTLCONF_webserver_api_password: "0000"
+      FTLCONF_webserver_api_password: ${PIHOLE_PSWD}
     volumes:
       - data:/etc/pihole/
       - dnsmasq:/etc/dnsmasq.d/
