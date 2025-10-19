@@ -1,0 +1,16 @@
+services:
+  registry:
+    image: registry:2
+    container_name: registry-docker
+    restart: unless-stopped
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      REGISTRY_HTTP_ADDR: :5000
+    volumes:
+      - data:/var/lib/registry
+    ports:
+      - 5000:5000
+
+volumes:
+  data:
+    external: false
