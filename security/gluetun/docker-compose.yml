@@ -22,8 +22,12 @@ services:
     networks:
       network_security:
         ipv4_address: 10.10.5.50
+      network_service:
+        ipv4_address: 10.10.3.51
 
 networks:
+  network_service:
+    external: true
   network_security:
     external: true
 
