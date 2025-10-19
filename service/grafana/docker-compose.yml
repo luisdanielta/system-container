@@ -22,7 +22,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
-      - grafana_data:/var/lib/grafana
+      - data:/var/lib/grafana
     depends_on:
       - loki
 
@@ -31,4 +31,5 @@ networks:
     external: true
 
 volumes:
-  grafana_data:
+  data:
+    external: false
