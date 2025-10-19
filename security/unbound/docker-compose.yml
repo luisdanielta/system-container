@@ -4,7 +4,7 @@ services:
     image: mvance/unbound:1.21.1
     restart: unless-stopped
     ports:
-      - 5053:53/tcp
+      - 5053:53
       - 5053:53/udp
     networks:
       network_security:
@@ -16,8 +16,6 @@ services:
 
 networks:
   network_security:
-    external: true
-  network_service:
     external: true
 
 volumes:
