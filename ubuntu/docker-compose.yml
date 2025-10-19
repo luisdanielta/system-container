@@ -1,6 +1,5 @@
 # This Compose file defines two Ubuntu-based services sharing core configuration
 # for user environments and network settings, using YAML anchors to enforce DRY.
-version: '3.5'
 
 # Shared settings for all Ubuntu services
 x-ubuntu-base: &ubuntu-base
@@ -8,13 +7,7 @@ x-ubuntu-base: &ubuntu-base
   restart: unless-stopped
   privileged: true
   dns:
-    - 10.10.4.3
-
-x-ubuntu-nd: &ubuntu-nd
-  image: ubuntu:not-docker
-  restart: unless-stopped
-  dns:
-    - 10.10.4.3
+    - 10.10.4.200
 
 # System
 x-vol-shared: &vol-shared user_shared:/home/shared
@@ -25,24 +18,24 @@ x-vol-opt: &vol-opt user_opt:/opt
 
 # Machine-specific settings
 services:
-  ubuntu-luist:
+  ubuntu:
     <<: *ubuntu-base
-    container_name: "ubuntu-luist"
+    container_name: "ubuntu-${USER}"
     ports:
       - "2220:22"
     environment:
-      USERNAME: "luist"
-      PSWD: "3956"
+      USERNAME: ${USER}
+      PSWD: ${PASSWORD}
     volumes:
       - *vol-shared
       - *vol-tmp
       - *vol-log
       - *vol-cache
       - *vol-opt
-      - user_data_luist:/home/luist
-      - user_cache:/home/luist/.cache
-      - dind_luist:/var/lib/docker
-      - etc_luist:/etc
+      - user_data:/home/${USER}
+      - user_cache:/home/${USER}/.cache
+      - dind:/var/lib/docker
+      - etc:/etc
 
     networks:
       network_user:
@@ -51,11 +44,11 @@ services:
       network_service:
 
 volumes:
-  user_data_luist:
+  user_data:
     external: false
-  dind_luist:
+  dind:
     external: false
-  etc_luist:
+  etc:
     external: false
 
   # Shared volumes
