@@ -1,0 +1,32 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3.40
+    container_name: vpn-proxy
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${PROTONVPN_WG_PRIVATE_KEY}
+      - FREE_ONLY=on
+      - DNS_ADDRESS=10.10.5.200
+    volumes:
+      - data:/gluetun
+    ports:
+      - 8000:8000
+      - 8978:8978 # qBittorrent WebUI
+      - 3050:6901 # VNC for Chrome
+    restart: unless-stopped
+    networks:
+      network_security:
+        ipv4_address: 10.10.5.50
+
+networks:
+  network_security:
+    external: true
+
+volumes:
+  data:
+    external: false
