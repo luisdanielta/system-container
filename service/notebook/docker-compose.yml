@@ -3,10 +3,11 @@ services:
     image: quay.io/jupyter/julia-notebook:latest
     container_name: julia_jupyter
     restart: unless-stopped
-    ports:
-      - "8888:8888"
+    networks:
+      network_service:
+        ipv4_address: 10.10.3.17 # :8888
     dns:
-      - 8.8.8.8
+      - 10.10.3.200
     volumes:
       - workspace_data:/home/jovyan/work
     environment:
@@ -18,6 +19,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
+networks:
+  network_service:
+    external: true
 
 volumes:
   workspace_data:
