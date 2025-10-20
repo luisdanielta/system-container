@@ -13,10 +13,10 @@ USER root
 COPY --from=conda /opt/conda /conda
 
 # Moves the copied files to the final location in Alpine and removes the temporary copy
-RUN cp -a /conda/. /opt/conda
-RUN rm -rf /conda
+#RUN cp -a /conda/. /opt/conda
+#RUN rm -rf /conda
 
-COPY .condarc /tmp/.condarc
+COPY .condarc /conda/.condarc
 COPY entrypoint.sh /tmp/entrypoint.sh
 
 # Ensures the entrypoint script is executable
@@ -24,4 +24,4 @@ RUN chmod +x /tmp/entrypoint.sh
 ENTRYPOINT [ "/tmp/entrypoint.sh" ]
 
 # Default command to verify the installation
-CMD ["ls", "-la", "/opt/conda"]
+CMD ["ls", "-la", "/conda"]

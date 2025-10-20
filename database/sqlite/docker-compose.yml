@@ -1,0 +1,12 @@
+services:
+  sqlite:
+    image: alpine:3.20
+    container_name: sqlite_db
+    restart: unless-stopped
+    command: tail -f /dev/null
+    volumes:
+      - data:/data
+
+volumes:
+  data:
+    external: false

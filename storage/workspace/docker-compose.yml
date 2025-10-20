@@ -1,0 +1,15 @@
+services:
+  workspace:
+    image: alpine:3.20
+    container_name: workspace_maintainer
+    restart: unless-stopped
+    command: tail -f /dev/null
+    volumes:
+      - data:/data
+      - research:/research
+
+volumes:
+  research:
+    external: false
+  data:
+    external: false

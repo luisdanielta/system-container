@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   network:
     container_name: network-system
@@ -6,12 +5,18 @@ services:
     command: tail -f /dev/null # Keeps container alive to trigger network creation
     restart: unless-stopped
     networks:
-      - file-system
-      - db
-      - service
-      - user
-      - security
-      - shared
+      file-system:
+        ipv4_address: 10.10.1.2
+      db:
+        ipv4_address: 10.10.2.2
+      service:
+        ipv4_address: 10.10.3.2
+      user:
+        ipv4_address: 10.10.4.2
+      security:
+        ipv4_address: 10.10.5.2
+      shared:
+        ipv4_address: 10.10.6.2
 
 networks:
   file-system:

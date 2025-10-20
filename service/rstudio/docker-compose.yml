@@ -1,4 +1,3 @@
-version: "3.5"
 services:
   rstudio:
     container_name: rstudio
@@ -10,13 +9,14 @@ services:
       DISABLE_AUTH: true
     volumes:
       - config:/home/rstudio/.config/rstudio
-      - workspace:/home/rstudio
+      - data:/home/rstudio
+      - workspace_data:/home/rstudio/workspace
 
     networks:
       network_service:
         ipv4_address: 10.10.3.40
     dns:
-      - 10.10.3.3
+      - 10.10.3.200
 
 networks:
   network_service:
@@ -25,5 +25,8 @@ networks:
 volumes:
   config:
     external: false
-  workspace:
+  data:
     external: false
+  
+  workspace_data:
+    external: true
