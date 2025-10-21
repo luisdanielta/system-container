@@ -9,9 +9,9 @@ services:
     logging:
       driver: json-file
     ports:
-      - "2020:2020"    # Puerto HTTP (health / metrics)
-      - "24224:24224"  # Puerto TCP input
-      - "24224:24224/udp"
+      - 2020:2020    # Puerto HTTP (health / metrics)
+      - 24224:24224  # Puerto TCP input
+      - 24224:24224/udp
     volumes:
       - /var/log:/var/log:ro
       - /proc:/host/proc:ro
