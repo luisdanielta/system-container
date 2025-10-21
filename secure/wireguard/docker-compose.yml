@@ -27,6 +27,7 @@ services:
       network_security:
         ipv4_address: 10.10.5.4
       network_service:
+        ipv4_address: 10.10.3.4
 
 networks:
   network_security:
