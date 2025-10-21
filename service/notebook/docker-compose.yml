@@ -1,0 +1,29 @@
+services:
+  julia-jupyter:
+    image: quay.io/jupyter/julia-notebook:latest
+    container_name: julia_jupyter
+    restart: unless-stopped
+    networks:
+      network_service:
+        ipv4_address: 10.10.3.17 # :8888
+    dns:
+      - 10.10.3.200
+    volumes:
+      - workspace_data:/home/jovyan/work
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+    command: >
+      start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  network_service:
+    external: true
+
+volumes:
+  workspace_data:
+    external: true

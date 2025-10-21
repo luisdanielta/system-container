@@ -1,7 +1,6 @@
-version: '3.5'
 services:
   youtrack:
-    image: jetbrains/youtrack:2025.1.67057
+    image: jetbrains/youtrack:2025.2.89748
     container_name: youtrack
     ports:
       - "3031:8080"
@@ -17,7 +16,7 @@ services:
       network_service:
         ipv4_address: 10.10.3.50
     dns:
-      - 10.10.3.3
+      - 10.10.3.200
 
     deploy:
       resources:
