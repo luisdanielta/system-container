@@ -7,6 +7,7 @@ services:
       FTLCONF_dns_upstreams: "10.10.5.201#5053"
       FTLCONF_dns_listeningMode: "all"
       FTLCONF_webserver_api_password: ${PIHOLE_PSWD}
+      SKIPGRAVITYONBOOT: true
     volumes:
       - data:/etc/pihole/
       - dnsmasq:/etc/dnsmasq.d/
