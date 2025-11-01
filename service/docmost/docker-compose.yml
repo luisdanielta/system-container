@@ -1,24 +1,19 @@
-version: "3"
-
 services:
   docmost:
-    image: docmost/docmost:0.21
+    image: docmost/docmost:0.23.2
     container_name: docmost
-    ports:
-      - "7056:3000"
-
     networks:
       network_service:
-        ipv4_address: 10.10.3.50
+        ipv4_address: 10.10.3.50 # :3000
     
     dns:
-      - 10.10.3.3
+      - 10.10.3.200
     restart: unless-stopped
     volumes:
       - data:/app/data/storage
 
     environment:
-      APP_URL: "http://192.168.1.250:7056"
+      APP_URL: "http://10.10.3.50:3000"
       APP_SECRET: "728b4ed0be54ecbc978ae526f6b5b4646818719e4e682861a6bd55eed5b52fa8"
       DATABASE_URL: "postgresql://postgres_shared:postgres_shared@10.10.3.153/docmost?schema=public"
       REDIS_URL: "redis://10.10.3.143:6379"
