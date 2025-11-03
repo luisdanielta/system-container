@@ -13,7 +13,7 @@ services:
       - data:/app/data/storage
 
     environment:
-      APP_URL: "http://10.10.3.50:3000"
+      APP_URL: "http://docs.lan/"
       APP_SECRET: "728b4ed0be54ecbc978ae526f6b5b4646818719e4e682861a6bd55eed5b52fa8"
       DATABASE_URL: "postgresql://postgres_shared:postgres_shared@10.10.3.153/docmost?schema=public"
       REDIS_URL: "redis://10.10.3.143:6379"

@@ -27,6 +27,5 @@ volumes:
     external: false
   data:
     external: false
-  
   workspace_data:
     external: true

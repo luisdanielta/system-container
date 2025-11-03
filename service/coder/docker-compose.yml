@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   coder:
     image: ghcr.io/coder/coder:v2.15.3
